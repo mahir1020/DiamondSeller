@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/contact.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/forms.css') }}">
+{% endblock %}
+
+{% block title %}Contact Us | Luxury Diamonds{% endblock %}
+
+{% block content %}
+<div class="contact-hero">
+    <div class="container">
+        <h1>Get in Touch</h1>
+        <p class="lead">We're here to help you find your perfect diamond</p>
+    </div>
+</div>
+
+<section class="contact-section">
+    <div class="container">
+        <div class="contact-wrapper">
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <div class="info-header">
+                    <h2>Contact Information</h2>
+                    <p>Reach out to us through any of these channels</p>
+                </div>
+                
+                <div class="info-items">
+                    <div class="info-item">
+                        <div class="icon-circle">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Visit Us</h3>
+                            <p>123 Diamond Street</p>
+                            <p>New York, NY 10001</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="icon-circle">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Call Us</h3>
+                            <p>+1 (555) 123-4567</p>
+                            <p>Mon - Sat: 10:00 - 19:00</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="icon-circle">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>Email Us</h3>
+                            <p>info@luxurydiamonds.com</p>
+                            <p>support@luxurydiamonds.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form-container">
+                <h2>Send Us a Message</h2>
+                <form class="contact-form" method="POST">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="appointment">Book an Appointment</option>
+                                <option value="custom">Custom Design</option>
+                                <option value="repair">Repair Service</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="newsletter" id="newsletter">
+                            <span class="checkmark"></span>
+                            Subscribe to our newsletter for updates and special offers
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <span>Send Message</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="map-section">
+    <div class="container">
+        <h2>Visit Our Showroom</h2>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1!2d-73.9!3d40.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM40zMCcN!5e0!3m2!1sen!2sus!4v1234567890"
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</section>
+{% endblock %} 

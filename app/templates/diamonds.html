@@ -1,0 +1,179 @@
+{% extends "layout.html" %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/diamonds.css') }}">
+{% endblock %}
+{% block title %}Diamond Collection{% endblock %}
+
+{% block content %}
+<div class="collection-header">
+    <div class="container">
+        <h1>Our Diamond Collection</h1>
+        <p>Browse our extensive collection of premium diamonds</p>
+    </div>
+</div>
+
+<section class="diamond-collection">
+    <div class="container">
+        <!-- Search and Filter Section -->
+        <div class="filter-section">
+            <form class="search-filters" method="GET">
+                <div class="search-bar">
+                    <input type="text" name="search" placeholder="Search diamonds..." value="{{ current_filters.search }}">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Shape</label>
+                        <select name="shape">
+                            <option value="">All Shapes</option>
+                            {% for shape in filters.shapes %}
+                                {% if shape %}
+                                <option value="{{ shape }}" {% if current_filters.shape == shape %}selected{% endif %}>
+                                    {{ shape }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Color</label>
+                        <select name="color">
+                            <option value="">All Colors</option>
+                            {% for color in filters.colors %}
+                                {% if color %}
+                                <option value="{{ color }}" {% if current_filters.color == color %}selected{% endif %}>
+                                    {{ color }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Clarity</label>
+                        <select name="clarity">
+                            <option value="">All Clarities</option>
+                            {% for clarity in filters.clarities %}
+                                {% if clarity %}
+                                <option value="{{ clarity }}" {% if current_filters.clarity == clarity %}selected{% endif %}>
+                                    {{ clarity }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Diamond Type</label>
+                        <select name="diamond_type">
+                            <option value="">All Types</option>
+                            {% for type in filters.diamond_types %}
+                                {% if type %}
+                                <option value="{{ type }}" {% if current_filters.diamond_type == type %}selected{% endif %}>
+                                    {{ type }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Price Range ($)</label>
+                        <div class="range-inputs">
+                            <input type="number" name="min_price" placeholder="Min" value="{{ current_filters.min_price }}"
+                                min="{{ filters.min_price }}" max="{{ filters.max_price }}" step="0.01">
+                            <span>to</span>
+                            <input type="number" name="max_price" placeholder="Max" value="{{ current_filters.max_price }}"
+                                min="{{ filters.min_price }}" max="{{ filters.max_price }}" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Carat Range</label>
+                        <div class="range-inputs">
+                            <input type="number" name="min_carat" placeholder="Min" value="{{ current_filters.min_carat }}"
+                                min="{{ filters.min_carat }}" max="{{ filters.max_carat }}" step="0.01">
+                            <span>to</span>
+                            <input type="number" name="max_carat" placeholder="Max" value="{{ current_filters.max_carat }}"
+                                min="{{ filters.min_carat }}" max="{{ filters.max_carat }}" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="apply-filters">Apply Filters</button>
+                        <a href="{{ url_for('diamonds') }}" class="clear-filters">Clear All</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Diamond Grid -->
+        <div class="diamond-grid">
+            {% for diamond in diamonds.items %}
+            <div class="diamond-card">
+                {% if diamond.image_url %}
+                <img src="{{ diamond.image_url }}" alt="{{ diamond.shape }} Diamond">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/diamonds/diamond-default.jpg') }}" alt="{{ diamond.shape }} Diamond">
+                {% endif %}
+                <div class="diamond-info">
+                    <h3>{{ diamond.shape }} Diamond</h3>
+                    <div class="diamond-specs">
+                        <span class="spec"><i class="fas fa-weight"></i> {{ "%.2f"|format(diamond.carat) }} Carats</span>
+                        <span class="spec"><i class="fas fa-palette"></i> Color: {{ diamond.color }}</span>
+                        <span class="spec"><i class="fas fa-gem"></i> Clarity: {{ diamond.clarity }}</span>
+                        <span class="spec"><i class="fas fa-certificate"></i> Type: {{ diamond.diamond_type }}</span>
+                    </div>
+                    <p class="price">${{ "%.2f"|format(diamond.price|float) }}</p>
+                    <div class="diamond-actions">
+                        <a href="{{ url_for('diamond', diamond_id=diamond.id) }}" class="view-button">View Details</a>
+                        {% if diamond.video_url %}
+                        <a href="{{ diamond.video_url }}" target="_blank" class="video-button" title="View 360° Video">
+                            <i class="fas fa-play-circle"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if diamonds.items %}
+        <div class="pagination">
+            {% if diamonds.has_prev %}
+                <a href="{{ url_for('diamonds', page=diamonds.page-1, search=current_filters.search, 
+                                   shape=current_filters.shape, color=current_filters.color, 
+                                   clarity=current_filters.clarity, diamond_type=current_filters.diamond_type,
+                                   min_price=current_filters.min_price, max_price=current_filters.max_price,
+                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat) }}"
+                    class="page-link prev">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            {% endif %}
+
+            <span class="page-info">Page {{ diamonds.page }} of {{ diamonds.total_pages }}</span>
+
+            {% if diamonds.has_next %}
+                <a href="{{ url_for('diamonds', page=diamonds.page+1, search=current_filters.search, 
+                                   shape=current_filters.shape, color=current_filters.color, 
+                                   clarity=current_filters.clarity, diamond_type=current_filters.diamond_type,
+                                   min_price=current_filters.min_price, max_price=current_filters.max_price,
+                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat) }}"
+                    class="page-link next">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p>No diamonds found matching your criteria.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

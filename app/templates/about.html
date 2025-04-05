@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block title %}About Us | Luxury Diamonds{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/about.css') }}">
+{% endblock %}
+{% block content %}
+<div class="about-hero">
+    <div class="container">
+        <h1>Our Heritage in Fine Diamonds</h1>
+        <p class="lead">Crafting excellence since 1985</p>
+    </div>
+</div>
+
+<section class="about-section">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-content">
+                <h2>Our Story</h2>
+                <p>For over three decades, Luxury Diamonds has been at the forefront of diamond excellence. What began as a small family jeweler has grown into one of the most trusted names in premium diamonds and fine jewelry.</p>
+                <p>Our commitment to quality, transparency, and exceptional service has earned us the trust of generations of customers, making us their preferred choice for life's most precious moments.</p>
+            </div>
+            <div class="about-image">
+                <img src="{{ url_for('static', filename='images/about/store-front.jpg') }}" alt="Our Store">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="services-section">
+    <div class="container">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-gem"></i>
+                <h3>Diamond Selection</h3>
+                <p>Expert guidance in choosing the perfect diamond based on the 4Cs: Cut, Clarity, Color, and Carat weight.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-tools"></i>
+                <h3>Custom Design</h3>
+                <p>Create your dream piece with our master craftsmen who bring your vision to life with precision and artistry.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-sync-alt"></i>
+                <h3>Jewelry Repair</h3>
+                <p>Professional repair and restoration services to maintain the beauty and integrity of your precious pieces.</p>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-certificate"></i>
+                <h3>Certification</h3>
+                <p>All our diamonds come with internationally recognized certificates ensuring their quality and authenticity.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="expertise-section">
+    <div class="container">
+        <div class="expertise-grid">
+            <div class="expertise-image">
+                <img src="{{ url_for('static', filename='images/about/diamond-expert.jpg') }}" alt="Diamond Expert">
+            </div>
+            <div class="expertise-content">
+                <h2>Our Expertise</h2>
+                <div class="expertise-list">
+                    <div class="expertise-item">
+                        <h3>Master Craftsmen</h3>
+                        <p>Our team includes certified gemologists and master jewelers with decades of experience.</p>
+                    </div>
+                    <div class="expertise-item">
+                        <h3>Ethical Sourcing</h3>
+                        <p>We ensure all our diamonds are ethically sourced and conflict-free, adhering to the Kimberley Process.</p>
+                    </div>
+                    <div class="expertise-item">
+                        <h3>Quality Assurance</h3>
+                        <p>Every diamond undergoes rigorous quality checks before reaching our showroom.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="values-section">
+    <div class="container">
+        <h2 class="section-title">Our Core Values</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <i class="fas fa-heart"></i>
+                <h3>Passion</h3>
+                <p>We are passionate about diamonds and committed to excellence in everything we do.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Integrity</h3>
+                <p>We maintain the highest standards of honesty and transparency in all our dealings.</p>
+            </div>
+            <div class="value-card">
+                <i class="fas fa-star"></i>
+                <h3>Quality</h3>
+                <p>We never compromise on quality, offering only the finest diamonds to our clients.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

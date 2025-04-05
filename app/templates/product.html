@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/product.css') }}">
+{% endblock %}
+{% block content %}
+<h1>Diamond Product #{{ product_id }}</h1>
+<p>Details of the diamond...</p>
+<img src="{{ url_for('static', filename='images/diamond.jpg') }}" alt="Diamond Image">
+{% endblock %}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Luxury Diamonds{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Add base styles first -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components/footer.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    {% block page_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="container nav-container">
+                <a href="{{ url_for('home') }}" class="logo">
+                    <i class="fas fa-gem"></i> Luxury Diamonds
+                </a>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('diamonds') }}" class="nav-link">Collection</a></li>
+                    <li><a href="{{ url_for('about') }}" class="nav-link">About</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Luxury Diamonds</h3>
+                <p>Exceptional diamonds for extraordinary moments</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('diamonds') }}">Collection</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="far fa-envelope"></i> info@luxurydiamonds.com</p>
+                <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Diamond Street<br>New York, NY 10001</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Luxury Diamonds. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

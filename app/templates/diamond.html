@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/diamond.css') }}">
+{% endblock %}
+{% block title %}{{ diamond.shape }} Diamond | Luxury Diamonds{% endblock %}
+
+{% block content %}
+<div class="diamond-detail">
+    <div class="container">
+        <div class="diamond-detail-grid">
+            <!-- Image Section -->
+            <div class="diamond-images">
+                <div class="main-image">
+                    {% if diamond.image_url %}
+                    <img src="{{ diamond.image_url }}" alt="{{ diamond.shape }} Diamond">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/diamonds/diamond-default.jpg') }}" alt="{{ diamond.shape }} Diamond">
+                    {% endif %}
+                </div>
+                {% if diamond.video_url %}
+                <a href="{{ diamond.video_url }}" target="_blank" class="video-link">
+                    <i class="fas fa-play-circle"></i> View 360° Video
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Info Section -->
+            <div class="diamond-info">
+                <h1>{{ diamond.shape }} Diamond</h1>
+                <div class="diamond-type-badge">{{ diamond.diamond_type }}</div>
+                
+                <div class="price-block">
+                    <div class="current-price">${{ diamond.price|currency }}</div>
+                    {% if diamond.discount and diamond.discount > 0 %}
+                    <div class="original-price">${{ diamond.original_price|currency }}</div>
+                    <div class="discount-badge">-{{ diamond.discount|round|int }}% OFF</div>
+                    {% endif %}
+                </div>
+
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label">Carat Weight</span>
+                        <span class="spec-value">{{ "%.2f"|format(diamond.carat) }}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Color</span>
+                        <span class="spec-value">{{ diamond.color }}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Clarity</span>
+                        <span class="spec-value">{{ diamond.clarity }}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Cut</span>
+                        <span class="spec-value">{{ diamond.cut }}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Polish</span>
+                        <span class="spec-value">{{ diamond.polish }}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Symmetry</span>
+                        <span class="spec-value">{{ diamond.symmetry }}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Fluorescence</span>
+                        <span class="spec-value">{{ diamond.fluorescence }}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Measurements</span>
+                        <span class="spec-value">{{ diamond.measurements }}</span>
+                    </div>
+                </div>
+
+                <div class="certificate-info">
+                    <h3>Certification</h3>
+                    <div class="cert-details">
+                        <p><strong>Lab:</strong> {{ diamond.lab }}</p>
+                        <p><strong>Certificate Number:</strong> {{ diamond.certificate }}</p>
+                    </div>
+                </div>
+
+                <div class="contact-section">
+                    <a href="{{ url_for('contact') }}" class="contact-button">
+                        <i class="fas fa-envelope"></i> Inquire About This Diamond
+                    </a>
+                    <a href="{{ url_for('diamonds') }}" class="back-button">
+                        <i class="fas fa-arrow-left"></i> Back to Collection
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
