@@ -3,9 +3,30 @@
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/contact.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/components/forms.css') }}">
+<style>
+.flash-message {
+    padding: 12px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 1rem;
+    opacity: 0.95;
+    transition: opacity 0.5s;
+    z-index: 1000;
+    position: relative;
+}
+.flash-message.alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.flash-message.alert-danger  { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+.flash-message.alert-error   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+</style>
 {% endblock %}
 
-{% block title %}Contact Us | Luxury Diamonds{% endblock %}
+{% block page_js %}
+
+<script src="{{url_for('static', filename='js/contact.js')}}"></script>
+
+{% endblock %}
+{% block title %}Contact Us | Shriya Enterprise{% endblock %}
 
 {% block content %}
 <div class="contact-hero">
@@ -24,7 +45,7 @@
                     <h2>Contact Information</h2>
                     <p>Reach out to us through any of these channels</p>
                 </div>
-                
+
                 <div class="info-items">
                     <div class="info-item">
                         <div class="icon-circle">
@@ -32,8 +53,8 @@
                         </div>
                         <div class="info-content">
                             <h3>Visit Us</h3>
-                            <p>123 Diamond Street</p>
-                            <p>New York, NY 10001</p>
+                            <p>M-1 Parasmani, Jadakhadi</p>
+                            <p>Mahidharpura, Surat - 395003</p>
                         </div>
                     </div>
 
@@ -43,7 +64,7 @@
                         </div>
                         <div class="info-content">
                             <h3>Call Us</h3>
-                            <p>+1 (555) 123-4567</p>
+                            <p>+91 94290 1537</p>
                             <p>Mon - Sat: 10:00 - 19:00</p>
                         </div>
                     </div>
@@ -54,8 +75,7 @@
                         </div>
                         <div class="info-content">
                             <h3>Email Us</h3>
-                            <p>info@luxurydiamonds.com</p>
-                            <p>support@luxurydiamonds.com</p>
+                            <p>shriyagems38@gmail.com</p>
                         </div>
                     </div>
                 </div>
@@ -63,10 +83,10 @@
                 <div class="social-links">
                     <h3>Follow Us</h3>
                     <div class="social-icons">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/diamond_seller04?utm_source=qr&igsh=ODM2OWNqeGZyaWNi"
+                            class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/samir-patel-1a6036195?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                            class="social-icon" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
@@ -74,7 +94,26 @@
             <!-- Contact Form -->
             <div class="contact-form-container">
                 <h2>Send Us a Message</h2>
-                <form class="contact-form" method="POST">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <div id="flash-container">
+                      {% for category, message in messages %}
+                        <div class="flash-message alert-{{ category }}">{{ message }}</div>
+                      {% endfor %}
+                    </div>
+                    <script>
+                      setTimeout(function() {
+                        var flash = document.getElementById('flash-container');
+                        if (flash) {
+                          flash.style.opacity = '0';
+                          setTimeout(function() { flash.remove(); }, 500);
+                        }
+                      }, 2500);
+                    </script>
+                  {% endif %}
+                {% endwith %}
+                <form action="{{ url_for('contact') }}" method="POST" id="contactForm" class="contact-form">
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Full Name</label>
@@ -95,10 +134,10 @@
                             <label for="subject">Subject</label>
                             <select id="subject" name="subject" required>
                                 <option value="">Select a subject</option>
-                                <option value="general">General Inquiry</option>
-                                <option value="appointment">Book an Appointment</option>
-                                <option value="custom">Custom Design</option>
-                                <option value="repair">Repair Service</option>
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Book an Appointment">Book an Appointment</option>
+                                <option value="Custom Design">Custom Design</option>
+                                <option value="Repair Service">Repair Service</option>
                             </select>
                         </div>
                     </div>
@@ -107,15 +146,6 @@
                         <label for="message">Your Message</label>
                         <textarea id="message" name="message" rows="5" required></textarea>
                     </div>
-
-                    <div class="form-group">
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="newsletter" id="newsletter">
-                            <span class="checkmark"></span>
-                            Subscribe to our newsletter for updates and special offers
-                        </label>
-                    </div>
-
                     <button type="submit" class="submit-button">
                         <span>Send Message</span>
                         <i class="fas fa-paper-plane"></i>
@@ -130,15 +160,12 @@
     <div class="container">
         <h2>Visit Our Showroom</h2>
         <div class="map-container">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1!2d-73.9!3d40.7!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM40zMCcN!5e0!3m2!1sen!2sus!4v1234567890"
-                width="100%" 
-                height="450" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy">
+            <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.830651936998!2d72.82961607510958!3d21.198782080472623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04f2d93524975%3A0x61bb3f727010a45d!2sM-1%20Parasmani%2C%20Jadakhadi%2C%20Mahidharpura%2C%20Surat%2C%20Gujarat%20395003!5e0!3m2!1sen!2sin!4v1713963527891!5m2!1sen!2sin" 
+            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
             </iframe>
+
         </div>
     </div>
 </section>
-{% endblock %} 
+{% endblock %}

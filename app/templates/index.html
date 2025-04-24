@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
+
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/home.css') }}">
 {% endblock %}
-{% block title %}Luxury Diamonds | Premium Collection{% endblock %}
+
+{% block title %}Shriya Enterprise | Premium Collection{% endblock %}
 
 {% block content %}
 <div class="hero-section">
@@ -42,7 +44,7 @@
             <h2 class="section-title">Featured Diamonds</h2>
             <p class="section-subtitle">Explore our handpicked selection of exceptional diamonds</p>
         </div>
-        
+
         <div class="featured-grid">
             {% for diamond in featured_diamonds %}
             <div class="diamond-card">
@@ -54,12 +56,12 @@
                     </a>
                     {% endif %}
                 </div>
-                
+
                 <div class="image-container">
                     {% if diamond.image_url %}
                     <img src="{{ diamond.image_url }}" alt="{{ diamond.shape }} Diamond">
                     {% else %}
-                    <img src="{{ url_for('static', filename='images/diamonds/diamond-default.jpg') }}" alt="{{ diamond.shape }} Diamond">
+                    <img src="{{ url_for('static', filename='images/default_diamond.png') }}" alt="{{ diamond.shape }} Diamond">
                     {% endif %}
                 </div>
 
@@ -67,7 +69,7 @@
                     <h3>{{ diamond.shape }} Diamond</h3>
                     <div class="diamond-specs">
                         <div class="spec-group">
-                            <span class="spec"><i class="fas fa-weight"></i> {{ "%.2f"|format(diamond.carat) }} Carats</span>
+                            <span class="spec"><i class="fas fa-weight"></i> {{ '%.2f'|format(diamond.carat) }} Carats</span>
                             <span class="spec"><i class="fas fa-palette"></i> {{ diamond.color }}</span>
                         </div>
                         <div class="spec-group">
@@ -75,11 +77,11 @@
                             <span class="spec"><i class="fas fa-cut"></i> {{ diamond.cut }}</span>
                         </div>
                     </div>
-                    
+
                     <div class="price-section">
-                        <p class="price">${{ diamond.price|currency }}</p>
+                        <p class="price">${{ '{:,.0f}'.format(diamond.price) }}</p>
                         {% if diamond.discount and diamond.discount > 0 %}
-                        <span class="discount">-{{ diamond.discount|round|int }}%</span>
+                        <span class="discount">-{{ '%.0f'|format(diamond.discount) }}%</span>
                         {% endif %}
                     </div>
 
@@ -92,7 +94,7 @@
             </div>
             {% endfor %}
         </div>
-        
+
         <div class="view-all-section">
             <a href="{{ url_for('diamonds') }}" class="view-all-button">
                 View All Diamonds <i class="fas fa-arrow-right"></i>
@@ -100,4 +102,26 @@
         </div>
     </div>
 </section>
+
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.feature-card, .diamond-card').forEach(card => {
+            observer.observe(card);
+        });
+    });
+</script>
 {% endblock %}

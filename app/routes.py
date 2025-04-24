@@ -1,8 +1,12 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify, abort
+from flask_mail import Mail, Message
 from app import app, db
 from app.models import Diamond
 import json
 import os
+
+# Initialize Flask-Mail
+mail = Mail(app)
 
 def load_diamonds_data():
     try:
@@ -61,14 +65,30 @@ def map_diamond_data(json_data):
 
 # Load diamonds data when the application starts
 diamonds_data = load_diamonds_data()
-# print(diamonds_data)
-
-# After loading diamonds_data
 print(f"\nLoaded {len(diamonds_data)} diamonds")
+
+class Pagination:
+    def __init__(self, items, page, per_page, total):
+        self.items = items
+        self.page = page
+        self.per_page = per_page
+        self.total = total
+        
+    @property
+    def total_pages(self):
+        return (self.total + self.per_page - 1) // self.per_page
+
+    @property
+    def has_prev(self):
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        return self.page < self.total_pages
 
 @app.route('/')
 def home():
-    featured_diamonds = diamonds_data[:9] if diamonds_data else []
+    featured_diamonds = diamonds_data[:12] if diamonds_data else []
     return render_template('index.html', featured_diamonds=featured_diamonds)
 
 @app.route('/diamonds')
@@ -78,38 +98,32 @@ def diamonds():
         flash('No diamonds data available.', 'error')
         return render_template('diamonds.html', diamonds=None, filters={}, current_filters={})
 
-    # Debug prints
-    print("\nFirst diamond data:", diamonds_data[0])
-    print("\nShape values:", set(d['shape'] for d in diamonds_data))
-    print("\nColor values:", set(d['color'] for d in diamonds_data))
-    print("\nClarity values:", set(d['clarity'] for d in diamonds_data))
-    print("\nDiamond type values:", set(d['diamond_type'] for d in diamonds_data))
-
     page = request.args.get('page', 1, type=int)
-    per_page = 9
+    per_page = 12
     search_query = request.args.get('search', '')
+    sort = request.args.get('sort', 'price_asc')
     
     # Filter parameters
     shape = request.args.get('shape', '')
     color = request.args.get('color', '')
     clarity = request.args.get('clarity', '')
+    diamond_type = request.args.get('diamond_type', '')
     min_price = request.args.get('min_price', type=float)
     max_price = request.args.get('max_price', type=float)
     min_carat = request.args.get('min_carat', type=float)
     max_carat = request.args.get('max_carat', type=float)
-    diamond_type = request.args.get('diamond_type', '')
-
-    # Debug print
-    print("Available shapes:", set(d['shape'] for d in diamonds_data))
-    print("Selected shape:", shape)
 
     # Filter the diamonds
     filtered_diamonds = diamonds_data.copy()
     
     if search_query:
+        search_query = search_query.lower()
         filtered_diamonds = [
             d for d in filtered_diamonds 
-            if search_query.lower() in str(d).lower()
+            if search_query in d['shape'].lower() or 
+               search_query in d['color'].lower() or
+               search_query in d['clarity'].lower() or
+               search_query in d['diamond_type'].lower()
         ]
     
     if shape:
@@ -129,7 +143,17 @@ def diamonds():
     if max_carat:
         filtered_diamonds = [d for d in filtered_diamonds if d['carat'] <= max_carat]
 
-    # Get unique values for filters (before pagination)
+    # Sort the diamonds
+    if sort == 'price_asc':
+        filtered_diamonds.sort(key=lambda x: x['price'])
+    elif sort == 'price_desc':
+        filtered_diamonds.sort(key=lambda x: x['price'], reverse=True)
+    elif sort == 'carat_desc':
+        filtered_diamonds.sort(key=lambda x: x['carat'], reverse=True)
+    elif sort == 'newest':
+        filtered_diamonds.reverse()  # Assuming newest are at the end of the list
+
+    # Get unique values for filters
     unique_values = {
         'shapes': sorted({d['shape'].strip() for d in diamonds_data if d['shape']}),
         'colors': sorted({d['color'].strip() for d in diamonds_data if d['color']}),
@@ -141,37 +165,14 @@ def diamonds():
         'min_carat': min(d['carat'] for d in diamonds_data)
     }
 
-    # Debug print
-    print("Unique values:", unique_values)
-    print("Number of filtered diamonds:", len(filtered_diamonds))
-
     # Pagination
     total_diamonds = len(filtered_diamonds)
     start_idx = (page - 1) * per_page
     end_idx = start_idx + per_page
     
-    class Pagination:
-        def __init__(self, items, page, per_page, total):
-            self.items = items
-            self.page = page
-            self.per_page = per_page
-            self.total = total
-            
-        def iter_pages(self):
-            total_pages = (self.total + self.per_page - 1) // self.per_page
-            return range(1, total_pages + 1)
-
-        @property
-        def total_pages(self):
-            return (self.total + self.per_page - 1) // self.per_page
-
-        @property
-        def has_prev(self):
-            return self.page > 1
-
-        @property
-        def has_next(self):
-            return self.page < self.total_pages
+    # Ensure diamond IDs are integers
+    for diamond in filtered_diamonds:
+        diamond['id'] = int(float(diamond['id']))
 
     paginated_diamonds = Pagination(
         filtered_diamonds[start_idx:end_idx],
@@ -193,7 +194,8 @@ def diamonds():
             'min_price': min_price,
             'max_price': max_price,
             'min_carat': min_carat,
-            'max_carat': max_carat
+            'max_carat': max_carat,
+            'sort': sort
         }
     )
 
@@ -208,8 +210,42 @@ def diamond(diamond_id):
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        subject = request.form.get('subject')
+        message = request.form.get('message')
+
+        if not name or not email or not message or not subject:
+            flash('Please fill out all required fields.', 'danger')
+            return redirect(url_for('contact'))
+
+        try:
+            msg = Message(
+                subject=f"New Contact Form Submission: {subject}",
+                sender=app.config['MAIL_DEFAULT_SENDER'],
+                recipients=[app.config['MAIL_RECEIVER_ADDRESS']],
+            )
+            msg.body = f"""
+                Name: {name}
+                Email: {email}
+                Phone: {phone}
+                Subject: {subject}
+
+                Message:
+                {message}
+                """
+            msg.html = render_template("email_template.html", name=name, email=email, phone=phone, subject=subject, message=message)
+            mail.send(msg)
+            flash('Your message has been sent successfully!', 'success')
+        except Exception as e:
+            flash('An error occurred while sending your message. Please try again later.', 'danger')
+        
+        return redirect(url_for('contact'))
+
     return render_template('contact.html')
 
 @app.template_filter('currency')

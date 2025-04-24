@@ -1,4 +1,10 @@
 {% extends "layout.html" %}
+{% block page_js %}
+
+<script src="{{ url_for('static', filename='js/diamonds.js') }}"></script>
+
+{% endblock %}
+
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/diamonds.css') }}">
 {% endblock %}
@@ -14,8 +20,13 @@
 
 <section class="diamond-collection">
     <div class="container">
+        <!-- Mobile Filter Toggle
+        <button class="filter-toggle" id="filterToggle">
+            <i class="fas fa-filter"></i> Filter Options
+        </button> -->
+
         <!-- Search and Filter Section -->
-        <div class="filter-section">
+        <div class="filter-section" id="filterSection">
             <form class="search-filters" method="GET">
                 <div class="search-bar">
                     <input type="text" name="search" placeholder="Search diamonds..." value="{{ current_filters.search }}">
@@ -82,6 +93,16 @@
                     </div>
 
                     <div class="filter-group">
+                        <label>Sort By</label>
+                        <select name="sort">
+                            <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="carat_desc" {% if current_filters.sort == 'carat_desc' %}selected{% endif %}>Carat: High to Low</option>
+                            <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>Newest First</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
                         <label>Price Range ($)</label>
                         <div class="range-inputs">
                             <input type="number" name="min_price" placeholder="Min" value="{{ current_filters.min_price }}"
@@ -111,14 +132,86 @@
             </form>
         </div>
 
+        <!-- Results Counter -->
+        {% if diamonds.items %}
+        <div class="results-counter">
+            Showing {{ diamonds.items|length }} of {{ diamonds.total }} diamonds
+        </div>
+        {% endif %}
+
+        <!-- Loading Indicator -->
+        <div class="loading-indicator" id="loadingIndicator" style="display: none;">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Loading diamonds...</span>
+        </div>
+
+        <!-- Compare Bar -->
+        <div class="compare-bar" id="compareBar" style="display: none;">
+            <div class="compare-diamonds" id="compareDiamonds"></div>
+            <div class="compare-actions">
+                <button id="compareBtn" class="btn btn-primary">Compare Selected</button>
+                <button id="clearCompareBtn" class="btn btn-outline">Clear</button>
+            </div>
+        </div>
+
+        <!-- Compare Panel -->
+        <div class="compare-panel" id="comparePanel">
+            <div class="compare-panel-header">
+                <h3>Compare Diamonds</h3>
+                <button class="close-compare" id="closeCompare">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="compare-panel-content">
+                <div class="selected-diamonds" id="selectedDiamonds">
+                    <!-- Selected diamonds will be added here dynamically -->
+                </div>
+                <div class="comparison-table" id="comparisonTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Properties</th>
+                                <!-- Diamond columns will be added dynamically -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="shape-row">
+                                <td>Shape</td>
+                            </tr>
+                            <tr class="carat-row">
+                                <td>Carat</td>
+                            </tr>
+                            <tr class="color-row">
+                                <td>Color</td>
+                            </tr>
+                            <tr class="clarity-row">
+                                <td>Clarity</td>
+                            </tr>
+                            <tr class="type-row">
+                                <td>Type</td>
+                            </tr>
+                            <tr class="price-row">
+                                <td>Price</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="compare-panel-footer">
+                <span class="compare-count">0 diamonds selected</span>
+                <button class="clear-all" id="clearAllCompare">Clear All</button>
+            </div>
+        </div>
+
         <!-- Diamond Grid -->
         <div class="diamond-grid">
             {% for diamond in diamonds.items %}
-            <div class="diamond-card">
+            <div class="diamond-card" data-id="{{ diamond.id }}">
+                <div class="card-badge">{{ diamond.shape }}</div>
                 {% if diamond.image_url %}
                 <img src="{{ diamond.image_url }}" alt="{{ diamond.shape }} Diamond">
                 {% else %}
-                <img src="{{ url_for('static', filename='images/diamonds/diamond-default.jpg') }}" alt="{{ diamond.shape }} Diamond">
+                <img src="{{ url_for('static', filename='images/default_diamond.png') }}" alt="{{ diamond.shape }} Diamond">
                 {% endif %}
                 <div class="diamond-info">
                     <h3>{{ diamond.shape }} Diamond</h3>
@@ -136,6 +229,15 @@
                             <i class="fas fa-play-circle"></i>
                         </a>
                         {% endif %}
+                        <button type="button" 
+                                class="compare-button" 
+                                data-id="{{ diamond.id }}"
+                                data-shape="{{ diamond.shape }}"
+                                data-carat="{{ "%.2f"|format(diamond.carat) }}"
+                                data-price="{{ "%.2f"|format(diamond.price) }}"
+                                title="Add to Compare">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -150,7 +252,8 @@
                                    shape=current_filters.shape, color=current_filters.color, 
                                    clarity=current_filters.clarity, diamond_type=current_filters.diamond_type,
                                    min_price=current_filters.min_price, max_price=current_filters.max_price,
-                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat) }}"
+                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat,
+                                   sort=current_filters.sort) }}"
                     class="page-link prev">
                     <i class="fas fa-chevron-left"></i>
                 </a>
@@ -163,7 +266,8 @@
                                    shape=current_filters.shape, color=current_filters.color, 
                                    clarity=current_filters.clarity, diamond_type=current_filters.diamond_type,
                                    min_price=current_filters.min_price, max_price=current_filters.max_price,
-                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat) }}"
+                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat,
+                                   sort=current_filters.sort) }}"
                     class="page-link next">
                     <i class="fas fa-chevron-right"></i>
                 </a>
@@ -172,8 +276,10 @@
         {% else %}
         <div class="no-results">
             <p>No diamonds found matching your criteria.</p>
+            <a href="{{ url_for('diamonds') }}" class="btn btn-primary">Reset Filters</a>
         </div>
         {% endif %}
     </div>
 </section>
-{% endblock %} 
+
+{% endblock %}

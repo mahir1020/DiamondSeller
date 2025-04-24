@@ -2,7 +2,7 @@
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/diamond.css') }}">
 {% endblock %}
-{% block title %}{{ diamond.shape }} Diamond | Luxury Diamonds{% endblock %}
+{% block title %}{{ diamond.shape }} Diamond | Shriya Enterprise{% endblock %}
 
 {% block content %}
 <div class="diamond-detail">
@@ -14,7 +14,7 @@
                     {% if diamond.image_url %}
                     <img src="{{ diamond.image_url }}" alt="{{ diamond.shape }} Diamond">
                     {% else %}
-                    <img src="{{ url_for('static', filename='images/diamonds/diamond-default.jpg') }}" alt="{{ diamond.shape }} Diamond">
+                    <img src="{{ url_for('static', filename='images/default_diamond.png')}}" alt="{{ diamond.shape }} Diamond">
                     {% endif %}
                 </div>
                 {% if diamond.video_url %}
