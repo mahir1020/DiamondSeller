@@ -1,0 +1,11 @@
+name: Keep Render Instance Alive
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
+
+jobs:
+  ping-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping API
+        run: curl -X GET https://diamondseller.onrender.com
