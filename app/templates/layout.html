@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Shriya Enterprise{% endblock %}</title>
-
-
+    <title>{% block title %}Shriya Gems{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/logo.ico') }}">
     <script src="{{ url_for('static', filename='js/diamonds.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Add base styles first -->
@@ -20,8 +19,11 @@
         <nav class="main-nav">
             <div class="container nav-container">
                 <a href="{{ url_for('home') }}" class="logo">
-                    <i class="fas fa-gem"></i> Shriya Enterprise
+                    <i class="fas fa-gem"></i> Shriya Gems
                 </a>
+                <div class="menu-toggle" onclick="toggleMenu()">
+                    <i class="fas fa-bars"></i>
+                </div>                
                 <ul class="nav-links">
                     <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
                     <li><a href="{{ url_for('diamonds') }}" class="nav-link">Collection</a></li>
@@ -39,7 +41,7 @@
     <footer>
         <div class="container footer-content">
             <div class="footer-section">
-                <h3>Shriya Enterprise</h3>
+                <h3>Shriya Gems</h3>
                 <p>Exceptional diamonds for extraordinary moments</p>
                 <div class="social-icons">
                     <a href="https://www.instagram.com/diamond_seller04?utm_source=qr&igsh=ODM2OWNqeGZyaWNi" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -63,8 +65,14 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Shriya Enterprise. All rights reserved.</p>
+            <p>&copy; 2024 Shriya Gems. All rights reserved.</p>
         </div>
     </footer>
 </body>
 </html>
+<script>
+    function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('open');
+    }
+</script>

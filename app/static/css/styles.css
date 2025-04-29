@@ -7,47 +7,49 @@
     --border-radius: 8px;
     --transition: all 0.3s ease;
     --box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-}
-
-* {
+  }
+  
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
+  }
+  
+  body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    padding-top: 70px;
     background-color: #fff;
-}
-
-.container {
-    max-width: 80%;
+    padding-top: 70px;
+  }
+  
+  /* Layout Container */
+  .container {
+    width: 90%;
+    max-width: 1140px;
     margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
+    padding: 0 1rem;
+  }
+  
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1rem;
-}
-
-/* Common utility classes */
-.section-title {
+  }
+  
+  /* Section Title */
+  .section-title {
     text-align: center;
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
     margin-bottom: 3rem;
     position: relative;
     padding-bottom: 1rem;
-}
-
-.section-title::after {
+  }
+  
+  .section-title::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -56,9 +58,10 @@ h1, h2, h3, h4, h5, h6 {
     width: 80px;
     height: 3px;
     background-color: var(--accent-color);
-}
-
-.btn {
+  }
+  
+  /* Buttons */
+  .btn {
     display: inline-block;
     padding: 0.8rem 2rem;
     border-radius: var(--border-radius);
@@ -66,85 +69,98 @@ h1, h2, h3, h4, h5, h6 {
     transition: var(--transition);
     font-weight: 500;
     text-align: center;
-}
-
-.btn-primary {
+    font-size: 1rem;
+  }
+  
+  .btn-primary {
     background-color: var(--accent-color);
     color: white;
-}
-
-.btn-primary:hover {
+  }
+  
+  .btn-primary:hover {
     background-color: #c0392b;
     transform: translateY(-2px);
-}
-
-.btn-outline {
+  }
+  
+  .btn-outline {
     border: 2px solid var(--accent-color);
     color: var(--accent-color);
-}
-
-.btn-outline:hover {
+  }
+  
+  .btn-outline:hover {
     background-color: var(--accent-color);
     color: white;
-}
-
-/* Grid layouts */
-.grid {
+  }
+  
+  /* Grid Layouts */
+  .grid {
     display: grid;
     gap: 2rem;
-}
-
-.grid-2 {
+  }
+  
+  .grid-2 {
     grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-3 {
+  }
+  
+  .grid-3 {
     grid-template-columns: repeat(3, 1fr);
-}
-
-.grid-4 {
+  }
+  
+  .grid-4 {
     grid-template-columns: repeat(4, 1fr);
-}
-
-/* Responsive Design */
-@media (max-width: 992px) {
-    .grid-4 {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .grid-3, .grid-4 {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .grid-2 {
-        grid-template-columns: 1fr;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .grid-3, .grid-4 {
-        grid-template-columns: 1fr;
-    }
-}
-
-main {
+  }
+  
+  /* Main content height */
+  main {
     min-height: calc(100vh - 70px - 400px);
-}
-
-/* Import component styles */
-@import url('components/header.css');
-@import url('components/footer.css');
-@import url('components/forms.css');
-
-/* Import page-specific styles */
-@import url('pages/home.css');
-@import url('pages/about.css');
-@import url('pages/contact.css');
-@import url('pages/diamonds.css');
-@import url('pages/product.css');
+  }
+  
+  /* ------------------ RESPONSIVE ------------------ */
+  
+  /* Tablet (≤ 992px) */
+  @media (max-width: 992px) {
+    .container {
+      width: 95%;
+    }
+  
+    .grid-4 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  /* Mobile (≤ 768px) */
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+      padding: 0 1rem;
+    }
+  
+    .grid-4, .grid-3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  
+    .section-title {
+      font-size: 2rem;
+    }
+  
+    .btn {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Small Devices (≤ 576px) */
+  @media (max-width: 576px) {
+    .grid-4, .grid-3 {
+      grid-template-columns: 1fr;
+    }
+  
+    .section-title {
+      font-size: 1.75rem;
+    }
+  }
+  

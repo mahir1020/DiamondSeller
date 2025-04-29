@@ -548,6 +548,25 @@
 }
 
 @media (max-width: 576px) {
+
+    .cta-section{
+        margin: 2rem 1rem;
+    }
+
+    .cta-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cta-section p {
+        margin-bottom: 1rem;
+        font-size: .9rem;
+    }
+    
+
+    
+    
+
     .services-grid {
         grid-template-columns: 1fr;
     }
@@ -568,3 +587,5 @@
     opacity: 1;
     transform: translateY(0);
 }
+
+
