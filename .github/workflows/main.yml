@@ -7,7 +7,17 @@ jobs:
   ping-api:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping API
-        # run: curl -X GET https://www.shriyagems.com/
-        run: curl --fail -X GET https://www.shriyagems.com/
-
+      - name: Ping API with retries
+        run: |
+          for i in {1..5}; do
+            echo "Pinging attempt #$i..."
+            if curl --fail --silent --show-error https://www.shriyagems.com/; then
+              echo "Ping successful!"
+              exit 0
+            else
+              echo "Ping failed. Retrying in 10 seconds..."
+              sleep 10
+            fi
+          done
+          echo "All ping attempts failed."
+          exit 1
