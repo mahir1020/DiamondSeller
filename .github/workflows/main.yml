@@ -8,4 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping API
-        run: curl -X GET https://diamondseller.onrender.com
+        # run: curl -X GET https://www.shriyagems.com/
+        run: curl --fail -X GET https://www.shriyagems.com/
+
