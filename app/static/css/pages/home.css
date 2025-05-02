@@ -98,6 +98,15 @@
     width: 100%;
 }
 
+/* Hero Section Logo */
+.hero-section .website-logo {
+    max-width: 150px; /* Adjust size as needed */
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Features Section */
 .features {
     padding: 100px 0 70px;
@@ -416,6 +425,13 @@
 
 .view-all-button:hover i {
     transform: translateX(5px);
+}
+
+/* Header Logo */
+.site-header .logo img {
+    max-width: 120px; /* Adjust size as needed */
+    height: auto;
+    display: inline-block;
 }
 
 /* Animation keyframes */

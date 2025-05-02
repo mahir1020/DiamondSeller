@@ -19,7 +19,8 @@
         <nav class="main-nav">
             <div class="container nav-container">
                 <a href="{{ url_for('home') }}" class="logo">
-                    <i class="fas fa-gem"></i> Shriya Gems
+                    <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Website Logo" class="website-logo" style="width: 35px; height: 35px; border-radius: 25%;" >
+                    Shriya Gems
                 </a>
                 <div class="menu-toggle" onclick="toggleMenu()">
                     <i class="fas fa-bars"></i>
