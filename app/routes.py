@@ -4,64 +4,75 @@ from app import app, db
 from app.models import Diamond
 import json
 import os
+import requests
+
 
 # Initialize Flask-Mail
 mail = Mail(app)
 
 def load_diamonds_data():
     try:
-        json_path = os.path.join('instance', 'IGI HPHT CVD STOCKLIST.json')
-        with open(json_path, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-            # Map each diamond item from the JSON data to our internal format
-            mapped_diamonds = []
-            for item in data['Sheet']:
-                try:
-                    # Skip any diamonds that are not available (marked as 'N' in Available field)
-                    if item.get('Available', '').upper() == 'N':
-                        continue
-                        
-                    mapped_diamond = map_diamond_data(item)
-                    # Only add valid diamonds with required fields
-                    if mapped_diamond['shape'] and mapped_diamond['carat'] > 0 and mapped_diamond['price'] > 0:
-                        mapped_diamonds.append(mapped_diamond)
-                except Exception as e:
-                    print(f"Error mapping diamond data: {e}")
-                    continue
-                    
-            return mapped_diamonds
-    except Exception as e:
-        print(f"Error reading JSON file: {e}")
-        return []
+        response = requests.get("http://www.wellcome.co.in/ambeExport/?APIKEY=JAY")
+        response.raise_for_status()  # Raise an error for bad status codes
 
+
+        data = response.json()
+
+        # Check if the response is a list
+        if not isinstance(data, list):
+            print("Unexpected response format. Expected a list.")
+            return []
+
+        # Map each diamond item from the API data to our internal format
+        mapped_diamonds = []
+        for item in data:  # Iterate directly over the list
+            try:
+                if item.get('Available', '').upper() == 'N':
+                    continue
+
+                mapped_diamond = map_diamond_data(item)
+                if mapped_diamond['shape'] and mapped_diamond['carat'] > 0 and mapped_diamond['price'] > 0:
+                    mapped_diamonds.append(mapped_diamond)
+            except Exception as e:
+                print(f"Error mapping diamond data: {e}")
+                continue
+
+        print(f"Successfully loaded {len(mapped_diamonds)} diamonds.")
+        return mapped_diamonds
+    except Exception as e:
+        print(f"Error fetching API data: {e}")
+        return []
+    
+    
 def map_diamond_data(json_data):
     try:
         return {
-            'id': json_data['SR.NO.'],
-            'shape': json_data['Shape '].strip() if 'Shape ' in json_data else '',
-            'carat': float(json_data['Weight']),
-            'cut': json_data.get('Cut', 'N/A'),
-            'color': json_data['Col'],
-            'clarity': json_data['Clr'],
-            'polish': json_data['Pol'],
-            'symmetry': json_data['Sym'],
-            'fluorescence': json_data['Flur'],
-            'price': float(json_data['Net Rate']),
-            'original_price': float(json_data['Rate']),
-            'discount': float(json_data['Disc%']),
-            'certificate': json_data['Certi No'],
-            'measurements': json_data.get('Measurements', 'N/A'),
-            'table': json_data.get('Table Prct', 0),
-            'depth': json_data.get('Depth Prct', 0),
-            'diamond_type': json_data['Diamon Type'],
-            'image_url': json_data.get('image Link', ''),
-            'video_url': json_data.get('Video Link', ''),
-            'lab': json_data['Lab'],
-            'location': json_data['branch Name']
+            'id': json_data['stock_num'],
+            'shape': json_data['shape'],
+            'carat': float(json_data['size']),
+            'cut': json_data.get('cut', 'N/A'),
+            'color': json_data['color'],
+            'clarity': json_data['clarity'],
+            'polish': json_data.get('polish', 'N/A'),
+            'symmetry': json_data.get('symmetry', 'N/A'),
+            'fluorescence': json_data.get('fluor_intensity', ''),
+            'price': float(json_data['total_sales_price']) * 1.2,  # Increase price by 20%
+            'original_price': float(json_data.get('Rap_price', 0)),
+            'discount': float(json_data.get('discount_percent', 0)),
+            'certificate': json_data.get('cert_num', ''),
+            'measurements': json_data.get('measurement', 'N/A'),
+            'table': float(json_data.get('table_percent', 0)),
+            'depth': float(json_data.get('depth_percent', 0)),
+            'diamond_type': json_data.get('DiamondType', 'N/A'),
+            'image_url': json_data.get('image_url', ''),
+            'video_url': json_data.get('video_url', ''),
+            'lab': json_data.get('lab', ''),
+            'location': f"{json_data.get('city', '')}, {json_data.get('country', '')}".strip(', ')
         }
     except Exception as e:
         print(f"Error mapping diamond: {e}")
         raise
+
 
 # Load diamonds data when the application starts
 diamonds_data = load_diamonds_data()
@@ -103,11 +114,11 @@ def diamonds():
     search_query = request.args.get('search', '')
     sort = request.args.get('sort', 'price_asc')
     
-    # Filter parameters
-    shape = request.args.get('shape', '')
-    color = request.args.get('color', '')
-    clarity = request.args.get('clarity', '')
-    diamond_type = request.args.get('diamond_type', '')
+    # Filter parameters (handle multiple values)
+    shapes = request.args.getlist('shape')  # Get multiple shapes
+    colors = request.args.getlist('color')  # Get multiple colors
+    clarities = request.args.getlist('clarity')  # Get multiple clarities
+    diamond_types = request.args.getlist('diamond_type')  # Get multiple diamond types
     min_price = request.args.get('min_price', type=float)
     max_price = request.args.get('max_price', type=float)
     min_carat = request.args.get('min_carat', type=float)
@@ -115,25 +126,25 @@ def diamonds():
 
     # Filter the diamonds
     filtered_diamonds = diamonds_data.copy()
-    
+
     if search_query:
         search_query = search_query.lower()
         filtered_diamonds = [
-            d for d in filtered_diamonds 
-            if search_query in d['shape'].lower() or 
+            d for d in filtered_diamonds
+            if search_query in d['shape'].lower() or
                search_query in d['color'].lower() or
                search_query in d['clarity'].lower() or
                search_query in d['diamond_type'].lower()
         ]
-    
-    if shape:
-        filtered_diamonds = [d for d in filtered_diamonds if d['shape'].strip().lower() == shape.strip().lower()]
-    if color:
-        filtered_diamonds = [d for d in filtered_diamonds if d['color'].strip().lower() == color.strip().lower()]
-    if clarity:
-        filtered_diamonds = [d for d in filtered_diamonds if d['clarity'].strip().lower() == clarity.strip().lower()]
-    if diamond_type:
-        filtered_diamonds = [d for d in filtered_diamonds if d['diamond_type'].strip().lower() == diamond_type.strip().lower()]
+
+    if shapes:
+        filtered_diamonds = [d for d in filtered_diamonds if d['shape'] in shapes]
+    if colors:
+        filtered_diamonds = [d for d in filtered_diamonds if d['color'] in colors]
+    if clarities:
+        filtered_diamonds = [d for d in filtered_diamonds if d['clarity'] in clarities]
+    if diamond_types:
+        filtered_diamonds = [d for d in filtered_diamonds if d['diamond_type'] in diamond_types]
     if min_price:
         filtered_diamonds = [d for d in filtered_diamonds if d['price'] >= min_price]
     if max_price:
@@ -169,10 +180,6 @@ def diamonds():
     total_diamonds = len(filtered_diamonds)
     start_idx = (page - 1) * per_page
     end_idx = start_idx + per_page
-    
-    # Ensure diamond IDs are integers
-    for diamond in filtered_diamonds:
-        diamond['id'] = int(float(diamond['id']))
 
     paginated_diamonds = Pagination(
         filtered_diamonds[start_idx:end_idx],
@@ -187,10 +194,10 @@ def diamonds():
         filters=unique_values,
         current_filters={
             'search': search_query,
-            'shape': shape,
-            'color': color,
-            'clarity': clarity,
-            'diamond_type': diamond_type,
+            'shape': shapes,
+            'color': colors,
+            'clarity': clarities,
+            'diamond_type': diamond_types,
             'min_price': min_price,
             'max_price': max_price,
             'min_carat': min_carat,
@@ -199,8 +206,9 @@ def diamonds():
         }
     )
 
-@app.route('/diamond/<int:diamond_id>')
+@app.route('/diamond/<diamond_id>')
 def diamond(diamond_id):
+    # Match the diamond by its string ID
     diamond = next((d for d in diamonds_data if d['id'] == diamond_id), None)
     if diamond is None:
         abort(404)

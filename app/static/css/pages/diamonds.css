@@ -133,7 +133,6 @@
 }
 
 .filter-group label {
-    display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
     color: #555;
@@ -712,6 +711,104 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: #888;
+}
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e1e1e1;
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition);
+}
+
+.dropdown-toggle:hover {
+    border-color: var(--accent-color);
+}
+
+/* Dropdown Menu Scrollable */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #e1e1e1;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 0.8rem; /* Adjust padding */
+    z-index: 10;
+    max-height: 180px; /* Slightly smaller max height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Scrollbar Styling */
+.dropdown-menu::-webkit-scrollbar {
+    width: 6px; /* Smaller scrollbar width */
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+.dropdown.active .dropdown-menu {
+    display: block;
+}
+
+/* Styled Checkbox */
+.styled-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem; /* Reduce gap between checkbox and label */
+    cursor: pointer;
+}
+
+.styled-checkbox input[type="checkbox"] {
+    width: 25%;
+    height: 19px;
+    border: 1.5px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.styled-checkbox input[type="checkbox"]:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.styled-checkbox input[type="checkbox"]:checked::after {
+    display: block;
+    text-align: center;
+    color: white;
+    font-size: 10px; /* Adjust font size */
+    line-height: 14px; /* Match checkbox size */
+}
+
+.checkbox-label {
+    font-size: 0.85rem; /* Slightly smaller font size */
+    color: #555;
+    user-select: none;
 }
 
 /* Responsiveness */

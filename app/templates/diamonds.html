@@ -36,65 +36,82 @@
                 </div>
 
                 <div class="filters">
+                    <!-- Shape Filter -->
                     <div class="filter-group">
-                        <label>Shape</label>
-                        <select name="shape">
-                            <option value="">All Shapes</option>
-                            {% for shape in filters.shapes %}
-                                {% if shape %}
-                                <option value="{{ shape }}" {% if current_filters.shape == shape %}selected{% endif %}>
-                                    {{ shape }}
-                                </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
+                        <label class="filter-label">Shape</label>
+                        <div class="dropdown">
+                            <button type="button" class="dropdown-toggle">Select Shape</button>
+                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
+                                {% for shape in filters.shapes %}
+                                <label class="styled-checkbox">
+                                    <input type="checkbox" name="shape" value="{{ shape }}" 
+                                           {% if shape in current_filters.shape %}checked{% endif %}>
+                                    <span class="custom-checkbox"></span>
+                                    <span class="checkbox-label">{{ shape }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- Color Filter -->
                     <div class="filter-group">
-                        <label>Color</label>
-                        <select name="color">
-                            <option value="">All Colors</option>
-                            {% for color in filters.colors %}
-                                {% if color %}
-                                <option value="{{ color }}" {% if current_filters.color == color %}selected{% endif %}>
-                                    {{ color }}
-                                </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
+                        <label class="filter-label">Color</label>
+                        <div class="dropdown">
+                            <button type="button" class="dropdown-toggle">Select Color</button>
+                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
+                                {% for color in filters.colors %}
+                                <label class="styled-checkbox">
+                                    <input type="checkbox" name="color" value="{{ color }}" 
+                                           {% if color in current_filters.color %}checked{% endif %}>
+                                    <span class="custom-checkbox"></span>
+                                    <span class="checkbox-label">{{ color }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- Clarity Filter -->
                     <div class="filter-group">
-                        <label>Clarity</label>
-                        <select name="clarity">
-                            <option value="">All Clarities</option>
-                            {% for clarity in filters.clarities %}
-                                {% if clarity %}
-                                <option value="{{ clarity }}" {% if current_filters.clarity == clarity %}selected{% endif %}>
-                                    {{ clarity }}
-                                </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
+                        <label class="filter-label">Clarity</label>
+                        <div class="dropdown">
+                            <button type="button" class="dropdown-toggle">Select Clarity</button>
+                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
+                                {% for clarity in filters.clarities %}
+                                <label class="styled-checkbox">
+                                    <input type="checkbox" name="clarity" value="{{ clarity }}" 
+                                           {% if clarity in current_filters.clarity %}checked{% endif %}>
+                                    <span class="custom-checkbox"></span>
+                                    <span class="checkbox-label">{{ clarity }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- Diamond Type Filter -->
                     <div class="filter-group">
-                        <label>Diamond Type</label>
-                        <select name="diamond_type">
-                            <option value="">All Types</option>
-                            {% for type in filters.diamond_types %}
-                                {% if type %}
-                                <option value="{{ type }}" {% if current_filters.diamond_type == type %}selected{% endif %}>
-                                    {{ type }}
-                                </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
+                        <label class="filter-label">Diamond Type</label>
+                        <div class="dropdown">
+                            <button type="button" class="dropdown-toggle">Select Diamond Type</button>
+                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
+                                {% for type in filters.diamond_types %}
+                                <label class="styled-checkbox">
+                                    <input type="checkbox" name="diamond_type" value="{{ type }}" 
+                                           {% if type in current_filters.diamond_type %}checked{% endif %}>
+                                    <span class="custom-checkbox"></span>
+                                    <span class="checkbox-label">{{ type }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- Sort By Filter -->
                     <div class="filter-group">
-                        <label>Sort By</label>
-                        <select name="sort">
+                        <label class="filter-label">Sort By</label>
+                        <select name="sort" class="styled-dropdown">
                             <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
                             <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
                             <option value="carat_desc" {% if current_filters.sort == 'carat_desc' %}selected{% endif %}>Carat: High to Low</option>
@@ -102,8 +119,9 @@
                         </select>
                     </div>
 
+                    <!-- Price Range Filter -->
                     <div class="filter-group">
-                        <label>Price Range ($)</label>
+                        <label class="filter-label">Price Range ($)</label>
                         <div class="range-inputs">
                             <input type="number" name="min_price" placeholder="Min" value="{{ current_filters.min_price }}"
                                 min="{{ filters.min_price }}" max="{{ filters.max_price }}" step="0.01">
@@ -113,8 +131,9 @@
                         </div>
                     </div>
 
+                    <!-- Carat Range Filter -->
                     <div class="filter-group">
-                        <label>Carat Range</label>
+                        <label class="filter-label">Carat Range</label>
                         <div class="range-inputs">
                             <input type="number" name="min_carat" placeholder="Min" value="{{ current_filters.min_carat }}"
                                 min="{{ filters.min_carat }}" max="{{ filters.max_carat }}" step="0.01">
@@ -123,11 +142,11 @@
                                 min="{{ filters.min_carat }}" max="{{ filters.max_carat }}" step="0.01">
                         </div>
                     </div>
+                </div>
 
-                    <div class="filter-actions">
-                        <button type="submit" class="apply-filters">Apply Filters</button>
-                        <a href="{{ url_for('diamonds') }}" class="clear-filters">Clear All</a>
-                    </div>
+                <div class="filter-actions">
+                    <button type="submit" class="apply-filters">Apply Filters</button>
+                    <a href="{{ url_for('diamonds') }}" class="clear-filters">Clear All</a>
                 </div>
             </form>
         </div>
