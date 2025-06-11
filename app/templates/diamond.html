@@ -1,6 +1,70 @@
 {% extends "layout.html" %}
 {% block page_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/diamond.css') }}">
+<style>
+/* Simple modal styles */
+#inquiryModal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+}
+#inquiryModal .modal-content {
+    background: #fff;
+    border-radius: 12px;
+    max-width: 400px;
+    margin: auto;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+#inquiryModal .close-modal {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+}
+#inquiryModal label {
+    font-weight: 500;
+    margin-top: 1rem;
+    display: block;
+}
+#inquiryModal input, #inquiryModal textarea {
+    width: 100%;
+    margin-top: 0.3rem;
+    margin-bottom: 1rem;
+    padding: 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+#inquiryModal textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+#inquiryModal .send-btn {
+    background: var(--accent-color, #e74c3c);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+#inquiryModal .send-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+</style>
 {% endblock %}
 {% block title %}{{ diamond.shape }} Diamond | Shriya Gems{% endblock %}
 
@@ -81,9 +145,9 @@
                 </div>
 
                 <div class="contact-section">
-                    <a href="{{ url_for('contact') }}" class="contact-button">
+                    <button type="button" class="contact-button" id="openInquiryModal">
                         <i class="fas fa-envelope"></i> Inquire About This Diamond
-                    </a>
+                    </button>
                     <a href="{{ url_for('diamonds') }}" class="back-button">
                         <i class="fas fa-arrow-left"></i> Back to Collection
                     </a>
@@ -92,4 +156,44 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+
+<!-- Inquiry Modal -->
+<div id="inquiryModal">
+    <div class="modal-content">
+        <button class="close-modal" id="closeInquiryModal" aria-label="Close">&times;</button>
+        <h2>Inquire About This Diamond</h2>
+        <form id="inquiryForm" method="POST" action="{{ url_for('contact') }}">
+            <input type="hidden" name="diamond_id" value="{{ diamond.id }}">
+            <input type="hidden" name="diamond_info" value="Shape: {{ diamond.shape }}, Carat: {{ diamond.carat }}, Color: {{ diamond.color }}, Clarity: {{ diamond.clarity }}, Type: {{ diamond.diamond_type }}">
+            <label for="name">Your Name</label>
+            <input type="text" name="name" id="inquiryName" required>
+            <label for="email">Your Email</label>
+            <input type="email" name="email" id="inquiryEmail" required>
+            <label for="phone">Phone Number</label>
+            <input type="text" name="phone" id="inquiryPhone">
+            <label for="note">Additional Note</label>
+            <textarea name="message" id="inquiryNote" placeholder="Any specific request or question?"></textarea>
+            <input type="hidden" name="subject" value="Diamond Inquiry: {{ diamond.shape }} (ID: {{ diamond.id }})">
+            <button type="submit" class="send-btn">Send Inquiry</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('inquiryModal');
+    const openBtn = document.getElementById('openInquiryModal');
+    const closeBtn = document.getElementById('closeInquiryModal');
+
+    openBtn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+    });
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+    });
+});
+</script>
+{% endblock %}
