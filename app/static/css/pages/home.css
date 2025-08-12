@@ -2,15 +2,14 @@
 
 /* Hero Section */
 .hero-section {
-    height: 80vh;
+    height: 100vh;
     min-height: 600px;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)),
-                url('../images/hero-diamonds.jpg') center/cover no-repeat fixed;
+    background: url('/static/images/homepage.jpg') center center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: #fff;
+    color: #554b4b;
     position: relative;
     overflow: hidden;
 }

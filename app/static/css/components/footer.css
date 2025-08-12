@@ -75,19 +75,20 @@ footer {
 /* Social Media Icons */
 .social-icons {
     display: flex;
-    gap: 1rem;
+    width: 0px;
+    gap: 2rem;
     margin-top: 1.5rem;
 }
 
 .social-icon {
     color: white;
     font-size: 1.2rem;
-    transition: all 0.3s ease;
+    width: 0px;
+
 }
 
 .social-icon:hover {
     color: var(--accent-color);
-    transform: translateY(-3px);
 }
 
 /* Responsive Footer */

@@ -2,8 +2,8 @@
 
 /* Collection Header */
 .collection-header {
-    background: linear-gradient(135deg, #2c3e50, #1a2530);
-    color: #fff;
+    background: url('/static/images/diamondcol.jpg') center center/cover no-repeat;
+    color: #0f0e0ed2;
     padding: 5rem 0 3rem;
     text-align: center;
     position: relative;
@@ -653,6 +653,131 @@
     font-size: 1.2rem;
     color: #666;
     margin-bottom: 1.5rem;
+}
+
+/* New Filter Layout */
+.new-filters-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+.filter-group {
+    flex: 1 1 180px;
+    min-width: 180px;
+    margin-bottom: 0;
+}
+
+/* Diamond Type Toggle */
+.diamond-type-toggle {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.diamond-type-toggle input[type="radio"] {
+    display: none;
+}
+.diamond-type-toggle label {
+    padding: 0.5rem 1.2rem;
+    border: 2px solid #e1e1e1;
+    border-radius: 20px;
+    background: #f9f9f9;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.diamond-type-toggle input[type="radio"]:checked + label,
+.diamond-type-toggle label.active {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+    color: #fff;
+}
+
+/* Shape Buttons */
+.shape-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+}
+.shape-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid #e1e1e1;
+    border-radius: 18px;
+    background: #f9f9f9;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+    transition: all 0.2s;
+    min-width: 90px;
+}
+.shape-btn.active,
+.shape-btn:hover {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+    color: #fff;
+}
+.shape-btn svg {
+    width: 22px;
+    height: 22px;
+}
+.shape-label {
+    font-weight: 500;
+}
+.shape-icon {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: #eaeaea;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Range Sliders */
+.range-slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.range-slider {
+    width: 100%;
+    accent-color: var(--accent-color);
+}
+.range-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: #555;
+    margin-top: 0.2rem;
+}
+
+/* Clarity & Cut Buttons */
+.clarity-buttons, .cut-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.clarity-btn, .cut-btn {
+    padding: 0.4rem 1rem;
+    border: 2px solid #e1e1e1;
+    border-radius: 16px;
+    background: #f9f9f9;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+    transition: all 0.2s;
+}
+.clarity-btn.active, .clarity-btn:hover,
+.cut-btn.active, .cut-btn:hover {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+    color: #fff;
 }
 
 /* Animations */
