@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block page_js %}
 
-<script src="{{ url_for('static', filename='js/diamonds.js') }}"></script>
+<script src="{{ url_for('static', filename='js/diamonds.js') }}" defer></script>
 
 {% endblock %}
 
@@ -25,138 +25,209 @@
             <i class="fas fa-filter"></i> Filter Options
         </button> -->
 
-        <!-- Search and Filter Section -->
-        <div class="filter-section" id="filterSection">
-            <form class="search-filters" method="GET">
-                <div class="search-bar">
-                    <input type="text" name="search" placeholder="Search diamonds..." value="{{ current_filters.search }}">
-                    <button type="submit" class="search-btn">
-                        <i class="fas fa-search"></i>
-                    </button>
+        <!-- Diamond Type Tabs -->
+        <div class="diamond-type-tabs">
+            <button class="tab-button active" data-type="NATURAL">Natural Diamonds</button>
+            <button class="tab-button" data-type="HPHT">HPHT Diamonds</button>
+            <button class="tab-button" data-type="CVD">CVD Diamonds</button>
+        </div>
+
+        <!-- Diamond Shapes -->
+        <div class="diamond-shapes">
+            <div class="shape-grid">
+                <!-- Round -->
+                <div class="shape-item" data-shape="round">
+                    <img class="shape-icon" src="../static/images/round.jpg" alt="Round Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Round</span>
+                </div>
+                <!-- Princess -->
+                <div class="shape-item" data-shape="princess">
+                    <img class="shape-icon" src="../static/images/princess.png" alt="Princess Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Princess</span>
+                </div>
+                <!-- Cushion -->
+                <div class="shape-item" data-shape="cushion">
+                    <img class="shape-icon" src="../static/images/cushion.png" alt="Cushion Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Cushion</span>
+                </div>
+                <!-- Oval -->
+                <div class="shape-item" data-shape="oval">
+                    <img class="shape-icon" src="../static/images/oval.jpg" alt="Oval Diamond" width="200" height="200">
+                    <span class="shape-name">Oval</span>
+                </div>
+                <!-- Radiant -->
+                <div class="shape-item" data-shape="radiant">
+                    <img class="shape-icon" src="../static/images/radiant.png" alt="Radiant Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Radiant</span>
+                </div>
+                <!-- Emerald -->
+                <div class="shape-item" data-shape="emerald">
+                    <img class="shape-icon" src="../static/images/emerald.jpg" alt="Emerald Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Emerald</span>
+                </div>
+                <!-- Asscher -->
+                <div class="shape-item" data-shape="asscher">
+                    <img class="shape-icon" src="../static/images/asscher.jpg" alt="Asscher Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Asscher</span>
+                </div>
+                <!-- Pear -->
+                <div class="shape-item" data-shape="pear">
+                    <img class="shape-icon" src="../static/images/pear.png" alt="Pear Diamond" width="200" height="200">
+                    <span class="shape-name">Pear</span>
+                </div>
+                <!-- Heart -->
+                <div class="shape-item" data-shape="heart">
+                    <img class="shape-icon" src="../static/images/heart.png" alt="Heart Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Heart</span>
+                </div>
+                <!-- Marquise -->
+                <div class="shape-item" data-shape="marquise">
+                    <img class="shape-icon" src="../static/images/marquise.png" alt="Marquise Diamond" width="200"
+                        height="200">
+                    <span class="shape-name">Marquise</span>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="filter-container">
+            <form class="filter-form">
+                <div class="filter-grid">
+                    <!-- CARAT -->
+                    <div class="filter-group">
+                        <label class="filter-label">CARAT</label>
+                        <div class="range-container">
+                            <div class="range-track">
+                                <div class="range-fill" id="caratFill"></div>
+                            </div>
+                            <div class="range-inputs">
+                                <input type="range" class="range-input" id="caratMin" min="0" max="10" step="0.01"
+                                    value="0.70">
+                                <input type="range" class="range-input" id="caratMax" min="0" max="10" step="0.01"
+                                    value="1.10">
+                            </div>
+                        </div>
+                        <div class="range-values">
+                            <input type="number" class="range-value" id="caratMinValue" value="0.70" step="0.01" min="0"
+                                max="10">
+                            <span class="range-separator">–</span>
+                            <input type="number" class="range-value" id="caratMaxValue" value="1.10" step="0.01" min="0"
+                                max="10">
+                        </div>
+                    </div>
+
+                    <!-- PRICE -->
+                    <div class="filter-group">
+                        <label class="filter-label">PRICE</label>
+                        <div class="range-container">
+                            <div class="range-track">
+                                <div class="range-fill" id="priceFill"></div>
+                            </div>
+                            <div class="range-inputs">
+                                <input type="range" class="range-input" id="priceMin" min="0" max="150000" step="100"
+                                    value="0">
+                                <input type="range" class="range-input" id="priceMax" min="0" max="150000" step="100"
+                                    value="150000">
+                            </div>
+                        </div>
+                        <div class="range-values">
+                            <input type="text" class="range-value" id="priceMinValue" value="$0" readonly>
+                            <span class="range-separator">–</span>
+                            <input type="text" class="range-value" id="priceMaxValue" value="$150,000" readonly>
+                        </div>
+                    </div>
+
+                    <!-- COLOR -->
+                    <div class="filter-group">
+                        <label class="filter-label">COLOR</label>
+                        <div class="range-container">
+                            <div class="range-track">
+                                <div class="range-fill" id="colorFill"></div>
+                            </div>
+                            <div class="range-inputs">
+                                <input type="range" class="range-input" id="colorMin" min="0" max="8" step="1"
+                                    value="2">
+                                <input type="range" class="range-input" id="colorMax" min="0" max="8" step="1"
+                                    value="4">
+                            </div>
+                        </div>
+                        <div class="category-ticks" id="colorTicks">
+                            <span class="tick">D</span>
+                            <span class="tick">E</span>
+                            <span class="tick active">F</span>
+                            <span class="tick">G</span>
+                            <span class="tick active">H</span>
+                            <span class="tick">I</span>
+                            <span class="tick">J</span>
+                            <span class="tick">K</span>
+                            <span class="tick">L-Z</span>
+                        </div>
+                    </div>
+
+                    <!-- CUT -->
+                    <div class="filter-group">
+                        <label class="filter-label">CUT</label>
+                        <div class="range-container">
+                            <div class="range-track">
+                                <div class="range-fill" id="cutFill"></div>
+                            </div>
+                            <div class="range-inputs">
+                                <input type="range" class="range-input" id="cutMin" min="0" max="5" step="1" value="0">
+                                <input type="range" class="range-input" id="cutMax" min="0" max="5" step="1" value="5">
+                            </div>
+                        </div>
+                        <div class="category-ticks" id="cutTicks">
+                            <span class="tick active">I</span>
+                            <span class="tick">EX</span>
+                            <span class="tick">VG</span>
+                            <span class="tick">G</span>
+                            <span class="tick">F</span>
+                            <span class="tick active">None</span>
+                        </div>
+                    </div>
+
+                    <!-- CLARITY -->
+                    <div class="filter-group">
+                        <label class="filter-label">CLARITY</label>
+                        <div class="range-container">
+                            <div class="range-track">
+                                <div class="range-fill" id="clarityFill"></div>
+                            </div>
+                            <div class="range-inputs">
+                                <input type="range" class="range-input" id="clarityMin" min="0" max="7" step="1"
+                                    value="3">
+                                <input type="range" class="range-input" id="clarityMax" min="0" max="7" step="1"
+                                    value="4">
+                            </div>
+                        </div>
+                        <div class="category-ticks" id="clarityTicks">
+                            <span class="tick">IF</span>
+                            <span class="tick">VVS1</span>
+                            <span class="tick">VVS2</span>
+                            <span class="tick active">VS1</span>
+                            <span class="tick active">VS2</span>
+                            <span class="tick">SI1</span>
+                            <span class="tick">SI2</span>
+                            <span class="tick">I1-I3</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="filters">
-                    <!-- Shape Filter -->
-                    <div class="filter-group">
-                        <label class="filter-label">Shape</label>
-                        <div class="dropdown">
-                            <button type="button" class="dropdown-toggle">Select Shape</button>
-                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
-                                {% for shape in filters.shapes %}
-                                <label class="styled-checkbox">
-                                    <input type="checkbox" name="shape" value="{{ shape }}" 
-                                           {% if shape in current_filters.shape %}checked{% endif %}>
-                                    <span class="custom-checkbox"></span>
-                                    <span class="checkbox-label">{{ shape }}</span>
-                                </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Color Filter -->
-                    <div class="filter-group">
-                        <label class="filter-label">Color</label>
-                        <div class="dropdown">
-                            <button type="button" class="dropdown-toggle">Select Color</button>
-                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
-                                {% for color in filters.colors %}
-                                <label class="styled-checkbox">
-                                    <input type="checkbox" name="color" value="{{ color }}" 
-                                           {% if color in current_filters.color %}checked{% endif %}>
-                                    <span class="custom-checkbox"></span>
-                                    <span class="checkbox-label">{{ color }}</span>
-                                </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Clarity Filter -->
-                    <div class="filter-group">
-                        <label class="filter-label">Clarity</label>
-                        <div class="dropdown">
-                            <button type="button" class="dropdown-toggle">Select Clarity</button>
-                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
-                                {% for clarity in filters.clarities %}
-                                <label class="styled-checkbox">
-                                    <input type="checkbox" name="clarity" value="{{ clarity }}" 
-                                           {% if clarity in current_filters.clarity %}checked{% endif %}>
-                                    <span class="custom-checkbox"></span>
-                                    <span class="checkbox-label">{{ clarity }}</span>
-                                </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Diamond Type Filter -->
-                    <div class="filter-group">
-                        <label class="filter-label">Diamond Type</label>
-                        <div class="dropdown">
-                            <button type="button" class="dropdown-toggle">Select Diamond Type</button>
-                            <div class="dropdown-menu" style="max-height: 200px; overflow-y: auto;">
-                                {% for type in filters.diamond_types %}
-                                <label class="styled-checkbox">
-                                    <input type="checkbox" name="diamond_type" value="{{ type }}" 
-                                           {% if type in current_filters.diamond_type %}checked{% endif %}>
-                                    <span class="custom-checkbox"></span>
-                                    <span class="checkbox-label">{{ type }}</span>
-                                </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sort By Filter -->
-                    <div class="filter-group">
-                        <label class="filter-label">Sort By</label>
-                        <select name="sort" class="styled-dropdown">
-                            <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                            <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-                            <option value="carat_desc" {% if current_filters.sort == 'carat_desc' %}selected{% endif %}>Carat: High to Low</option>
-                            <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>Newest First</option>
-                        </select>
-                    </div>
-
-                    <!-- Price Range Filter -->
-                    <div class="filter-group">
-                        <label class="filter-label">Price Range ($)</label>
-                        <div class="range-inputs">
-                            <input type="number" name="min_price" placeholder="Min" value="{{ current_filters.min_price }}"
-                                min="{{ filters.min_price }}" max="{{ filters.max_price }}" step="0.01">
-                            <span>to</span>
-                            <input type="number" name="max_price" placeholder="Max" value="{{ current_filters.max_price }}"
-                                min="{{ filters.min_price }}" max="{{ filters.max_price }}" step="0.01">
-                        </div>
-                    </div>
-
-                    <!-- Carat Range Filter -->
-                    <div class="filter-group">
-                        <label class="filter-label">Carat Range</label>
-                        <div class="range-inputs">
-                            <input type="number" name="min_carat" placeholder="Min" value="{{ current_filters.min_carat }}"
-                                min="{{ filters.min_carat }}" max="{{ filters.max_carat }}" step="0.01">
-                            <span>to</span>
-                            <input type="number" name="max_carat" placeholder="Max" value="{{ current_filters.max_carat }}"
-                                min="{{ filters.min_carat }}" max="{{ filters.max_carat }}" step="0.01">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="filter-actions">
-                    <button type="submit" class="apply-filters">Apply Filters</button>
-                    <a href="{{ url_for('diamonds') }}" class="clear-filters">Clear All</a>
+                <div class="toggle-container">
+                    <button type="button" class="reset-button" id="resetFilters">Reset Filters</button>
                 </div>
             </form>
         </div>
-
-        <!-- Results Counter -->
-        {% if diamonds.items %}
-        <div class="results-counter">
-            Showing {{ diamonds.items|length }} of {{ diamonds.total }} diamonds
-        </div>
-        {% endif %}
 
         <!-- Loading Indicator -->
         <div class="loading-indicator" id="loadingIndicator" style="display: none;">
@@ -164,16 +235,27 @@
             <span>Loading diamonds...</span>
         </div>
 
-        <!-- Compare Bar -->
-        <div class="compare-bar" id="compareBar" style="display: none;">
-            <div class="compare-diamonds" id="compareDiamonds"></div>
+        <!-- Results counter  -->
+        <div class="results-counter"></div>
+
+        <div class="diamond-grid"></div>
+
+        <!-- Pagination -->
+        <div class="pagination"></div>
+
+        
+        <!-- Comparison Bar -->
+        <div class="compare-bar" id="compareBar">
+            <div class="compare-diamonds" id="compareDiamonds">
+                <!-- Diamond items will be added dynamically -->
+            </div>
             <div class="compare-actions">
-                <button id="compareBtn" class="btn btn-primary">Compare Selected</button>
-                <button id="clearCompareBtn" class="btn btn-outline">Clear</button>
+                <button class="clear-all" id="clearAllCompare">Clear All</button>
+                <button class="view-compare clear-all" id="viewCompare">Compare</button>
             </div>
         </div>
 
-        <!-- Compare Panel -->
+
         <div class="compare-panel" id="comparePanel">
             <div class="compare-panel-header">
                 <h3>Compare Diamonds</h3>
@@ -182,123 +264,46 @@
                 </button>
             </div>
             <div class="compare-panel-content">
-                <div class="selected-diamonds" id="selectedDiamonds">
-                    <!-- Selected diamonds will be added here dynamically -->
-                </div>
-                <div class="comparison-table" id="comparisonTable">
-                    <table>
+                <div class="comparison-table">
+                    <table id="comparisonTable">
                         <thead>
                             <tr>
                                 <th>Properties</th>
-                                <!-- Diamond columns will be added dynamically -->
+                                <!-- Dynamically added diamond headers -->
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="shape-row">
                                 <td>Shape</td>
+                                <!-- Dynamically added diamond shapes -->
                             </tr>
                             <tr class="carat-row">
                                 <td>Carat</td>
+                                <!-- Dynamically added diamond carats -->
                             </tr>
                             <tr class="color-row">
                                 <td>Color</td>
+                                <!-- Dynamically added diamond colors -->
                             </tr>
                             <tr class="clarity-row">
                                 <td>Clarity</td>
-                            </tr>
-                            <tr class="type-row">
-                                <td>Type</td>
+                                <!-- Dynamically added diamond clarities -->
                             </tr>
                             <tr class="price-row">
                                 <td>Price</td>
+                                <!-- Dynamically added diamond prices -->
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="compare-panel-footer">
-                <span class="compare-count">0 diamonds selected</span>
-                <button class="clear-all" id="clearAllCompare">Clear All</button>
+                <div class="compare-count">0 diamonds selected</div>
+                <button class="clear-all" id="clearAllComparePanel">Clear All</button>
             </div>
         </div>
 
-        <!-- Diamond Grid -->
-        <div class="diamond-grid">
-            {% for diamond in diamonds.items %}
-            <div class="diamond-card" data-id="{{ diamond.id }}">
-                <div class="card-badge">{{ diamond.shape }}</div>
-                {% if diamond.image_url %}
-                <img src="{{ diamond.image_url }}" alt="{{ diamond.shape }} Diamond">
-                {% else %}
-                <img src="{{ url_for('static', filename='images/default_diamond.png') }}" alt="{{ diamond.shape }} Diamond">
-                {% endif %}
-                <div class="diamond-info">
-                    <h3>{{ diamond.shape }} Diamond</h3>
-                    <div class="diamond-specs">
-                        <span class="spec"><i class="fas fa-weight"></i> {{ "%.2f"|format(diamond.carat) }} Carats</span>
-                        <span class="spec"><i class="fas fa-palette"></i> Color: {{ diamond.color }}</span>
-                        <span class="spec"><i class="fas fa-gem"></i> Clarity: {{ diamond.clarity }}</span>
-                        <span class="spec"><i class="fas fa-certificate"></i> Type: {{ diamond.diamond_type }}</span>
-                    </div>
-                    <p class="price">${{ "%.2f"|format(diamond.price|float) }}</p>
-                    <div class="diamond-actions">
-                        <a href="{{ url_for('diamond', diamond_id=diamond.id) }}" class="view-button">View Details</a>
-                        {% if diamond.video_url %}
-                        <a href="{{ diamond.video_url }}" target="_blank" class="video-button" title="View 360° Video">
-                            <i class="fas fa-play-circle"></i>
-                        </a>
-                        {% endif %}
-                        <button type="button" 
-                                class="compare-button" 
-                                data-id="{{ diamond.id }}"
-                                data-shape="{{ diamond.shape }}"
-                                data-carat="{{ "%.2f"|format(diamond.carat) }}"
-                                data-price="{{ "%.2f"|format(diamond.price) }}"
-                                title="Add to Compare">
-                            <i class="fas fa-exchange-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
 
-        <!-- Pagination -->
-        {% if diamonds.items %}
-        <div class="pagination">
-            {% if diamonds.has_prev %}
-                <a href="{{ url_for('diamonds', page=diamonds.page-1, search=current_filters.search, 
-                                   shape=current_filters.shape, color=current_filters.color, 
-                                   clarity=current_filters.clarity, diamond_type=current_filters.diamond_type,
-                                   min_price=current_filters.min_price, max_price=current_filters.max_price,
-                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat,
-                                   sort=current_filters.sort) }}"
-                    class="page-link prev">
-                    <i class="fas fa-chevron-left"></i>
-                </a>
-            {% endif %}
-
-            <span class="page-info">Page {{ diamonds.page }} of {{ diamonds.total_pages }}</span>
-
-            {% if diamonds.has_next %}
-                <a href="{{ url_for('diamonds', page=diamonds.page+1, search=current_filters.search, 
-                                   shape=current_filters.shape, color=current_filters.color, 
-                                   clarity=current_filters.clarity, diamond_type=current_filters.diamond_type,
-                                   min_price=current_filters.min_price, max_price=current_filters.max_price,
-                                   min_carat=current_filters.min_carat, max_carat=current_filters.max_carat,
-                                   sort=current_filters.sort) }}"
-                    class="page-link next">
-                    <i class="fas fa-chevron-right"></i>
-                </a>
-            {% endif %}
-        </div>
-        {% else %}
-        <div class="no-results">
-            <p>No diamonds found matching your criteria.</p>
-            <a href="{{ url_for('diamonds') }}" class="btn btn-primary">Reset Filters</a>
-        </div>
-        {% endif %}
-    </div>
 </section>
 
 {% endblock %}
